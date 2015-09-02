@@ -16,20 +16,18 @@ board = {
   },
 
   rand: function(){
-    Math.round(Math.random() * (3000 - 500)) + 500;
+    return Math.round(Math.random() * (3000)) + 1000;
   },
 
   gameLoop: function() {
     console.log('start game loop');
     var tries = 20;
-    for (var i = tries.length - 1; i >= 0; i--) {
-      console.log('loop# ' + i);
+    for (var i = tries- 1; i >= 0; i--) {
       var rand = board.rand();
+      console.log('loop# ' + i + "rand: "+ rand);
 
-      setTimeout(function() {
-             molePeek();
-      }, rand)
-    }
+      (function() { setTimeout(board.molePeek, rand);} )();
+    } // end for loop
   },
 
   setupListeners: function(){
@@ -42,37 +40,46 @@ board = {
     console.log('create moles');
     for (var i = 1; i <= 8; i++){
       board.moles[i] = board.moleModule;
+      board.moles[i].slot = i;
     }
   },
 
   //forcing mole constructor into mole module
-  moleModule: (function(slot){
+  moleModule: (function(){
     mole ={};
-    mole.slot = slot;
+    mole.slot = 0;
+    var str = "something private";
     mole.peek = false;
     return mole;
-  })(slot),
+  })(),
 
 
   molePeek: function(){
-    console.log('a mole is peeking');
+    //refactor if already mole peeking delay
     //select mole
     var num = Math.floor(Math.random() * 8) + 1;
     $("#"+num).addClass('appearing-mole');
-    setTimeout(function() {
-             $("#"+num).removeClass('appearing-mole');
+    console.log('a mole is peeking in #' + num);
+    setTimeout(function() { board.moleHide($("#"+num));
       }, board.rand());
   },
 
-  // moleHide: function(){
-
-  // },
+  moleHide: function(div){
+    console.log('a mole went back into hiding');
+    div.removeClass('appearing-mole');
+  },
 
   selectHole: function(event){
-    if(event.target.hasClass('appearing-mole')){
-      event.target.removeClass('appearing-mole');
+    $mole = $(event.target);
+    if($mole.hasClass('appearing-mole')){
+      $mole.removeClass('appearing-mole');
       board.score++;
+      board.updateScore();
     }
+  },
+
+  updateScore: function(){
+    $('#score').text(board.score);
   }
 };
 
