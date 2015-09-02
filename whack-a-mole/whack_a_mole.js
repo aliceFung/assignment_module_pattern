@@ -1,6 +1,7 @@
 
 board = {
   score: 0,
+  moles: {},
 
   init: function($){
     board.$displayArea = $('#mole-home');
@@ -9,6 +10,7 @@ board = {
       board.$displayArea.append('<div class="hole" id="' + i+ '">');
     }
     board.setupListeners();
+    board.molesCreate();
     board.gameLoop();
   },
 
@@ -30,8 +32,21 @@ board = {
                             board.selectHole(event)}  );
   },
 
+  Mole: function(slot){
+    this.slot = slot;
+    this.peek = false;
+
+  },
+
+  molesCreate: function(){
+    for (var i = 1; i <= 8; i++){
+      board.moles[i] = new Mole(i);
+    }
+  },
+  
+
   molePeek: function(){
-    
+    Math.floor(Math.random() * 8) + 1  
   },
 
   selectHole: function(event){
