@@ -9,7 +9,20 @@ board = {
       board.$displayArea.append('<div class="hole" id="' + i+ '">');
     }
     board.setupListeners();
-    board.moleIntervals();
+    board.gameLoop();
+  },
+
+  gameLoop: function() {
+    var tries = 20;
+    for (var i = tries.length - 1; i >= 0; i--) {
+      tries[i]
+     
+      var rand = Math.round(Math.random() * (3000 - 500)) + 500;
+     
+      setTimeout(function() {
+             molePeek();
+      }, rand)
+    };
   },
 
   setupListeners: function(){
@@ -17,8 +30,8 @@ board = {
                             board.selectHole(event)}  );
   },
 
-  moleIntervals: function(){
-
+  molePeek: function(){
+    
   },
 
   selectHole: function(event){
@@ -29,15 +42,7 @@ board = {
   }
 };
 
-// function doSomething() {}
 
-// (function loop() {
-//    var rand = Math.round(Math.random() * (3000 - 500)) + 500;
-//    setTimeout(function() {
-//            doSomething();
-//            loop();
-//    }, rand);
-// }());
 
 
 
