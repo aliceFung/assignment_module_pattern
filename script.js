@@ -1,9 +1,14 @@
 //practice with revealing modules, returns obj with public methods
-var mod = mod || {}
+var mod = mod || {};
 
-  mod.RevealingModule = (function(){
+// var otherModule = mod.RevealingModule2;
 
+mod.RevealingModule = (function(otherModule){
+
+  //fn from other module: mod.RevealingModule2.checkLottNumMatch
+  var otherChecker = otherModule.checkLottoNumMatch2;
   //private variables
+  console.log(otherChecker);
   var _superSecretLottoNumbers = [1,3,5,7,9,11,13];
   var stub = {};
 
@@ -15,7 +20,9 @@ var mod = mod || {}
         matches++;
       }
     }
-    return matches == totalNumAccepted; //matches = number allowed per pick
+    if (matches != totalNumAccepted){
+      return otherChecker(picks);  //check with other secret numbers
+    }; //matches = number allowed per pick
   };
 
   stub.getTotalNumAccepted = function(){return totalNumAccepted; };
@@ -24,5 +31,5 @@ var mod = mod || {}
 
   return stub;
 
-})();
+})(mod.RevealingModule2);
 

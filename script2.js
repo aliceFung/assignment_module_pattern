@@ -1,5 +1,5 @@
 //practice with revealing modules, returns obj with public methods
-var mod = mod || {}
+var mod = mod || {};
 
 mod.RevealingModule2 = (function(){
 
