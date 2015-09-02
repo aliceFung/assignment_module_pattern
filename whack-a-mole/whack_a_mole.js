@@ -4,6 +4,7 @@ board = {
   moles: {},
 
   init: function($){
+    console.log('start game');
     board.$displayArea = $('#mole-home');
     //creates  8 divs
     for(var i = 1; i <= 8; i++ ){
@@ -14,40 +15,58 @@ board = {
     board.gameLoop();
   },
 
+  rand: function(){
+    Math.round(Math.random() * (3000 - 500)) + 500;
+  },
+
   gameLoop: function() {
+    console.log('start game loop');
     var tries = 20;
     for (var i = tries.length - 1; i >= 0; i--) {
-      tries[i]
-     
-      var rand = Math.round(Math.random() * (3000 - 500)) + 500;
-     
+      console.log('loop# ' + i);
+      var rand = board.rand();
+
       setTimeout(function() {
              molePeek();
       }, rand)
-    };
+    }
   },
 
   setupListeners: function(){
-    board.$displayArea.addEventListener('click', function(){
+    console.log('set listeners');
+    board.$displayArea.click(function(){
                             board.selectHole(event)}  );
   },
 
-  Mole: function(slot){
-    this.slot = slot;
-    this.peek = false;
-
-  },
-
   molesCreate: function(){
+    console.log('create moles');
     for (var i = 1; i <= 8; i++){
-      board.moles[i] = new Mole(i);
+      board.moles[i] = board.moleModule;
     }
   },
-  
+
+  //forcing mole constructor into mole module
+  moleModule: (function(slot){
+    mole ={};
+    mole.slot = slot;
+    mole.peek = false;
+    return mole;
+  })(slot),
+
 
   molePeek: function(){
-    Math.floor(Math.random() * 8) + 1  
+    console.log('a mole is peeking');
+    //select mole
+    var num = Math.floor(Math.random() * 8) + 1;
+    $("#"+num).addClass('appearing-mole');
+    setTimeout(function() {
+             $("#"+num).removeClass('appearing-mole');
+      }, board.rand());
   },
+
+  // moleHide: function(){
+
+  // },
 
   selectHole: function(event){
     if(event.target.hasClass('appearing-mole')){
@@ -58,9 +77,6 @@ board = {
 };
 
 
-
-
-
-
-
 $(document).ready(board.init($));
+
+
